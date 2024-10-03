@@ -1,11 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
+
 const PostSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     content: {
       type: String,
       required: true,
@@ -13,25 +9,44 @@ const PostSchema = new mongoose.Schema(
     images: {
       type: [String],
     },
-    category: {
-      type: String,
+    categories: {
+      type: [Types.ObjectId],
       required: true,
+      ref: "Category",
     },
-    tags: {
-      type: [String],
-      default: [],
+    upVotes: {
+      type: [Types.ObjectId],
+      ref: "User",
     },
-    isPremium: {
-      type: Boolean,
-      default: false,
+    downVotes: {
+      type: [Types.ObjectId],
+      ref: "User",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    upVoteCount: {
+      type: Number,
+      default: 0,
+    },
+    downVoteCount: {
+      type: Number,
+      default: 0,
+    },
+    commentCount: {
+      type: Number,
+      default: 0,
+    },
+    premium: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
+
 const Post = mongoose.model("Post", PostSchema);
+
 export default Post;
