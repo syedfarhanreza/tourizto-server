@@ -3,6 +3,9 @@ import userRoute from "../modules/user/user.route";
 import authRoute from "../modules/auth/auth.route";
 import postRoute from "../modules/post/post.route";
 import categoryRoute from "../modules/category/category.route";
+import followerRoute from "../modules/follower/follower.route";
+import statisticsRoute from "../modules/statistics/staistics.route";
+import commentRoute from "../modules/comments/comment.route";
 
 const router = express.Router();
 
@@ -22,6 +25,18 @@ const moduleRoute = [
   {
     path: "/category",
     route: categoryRoute,
+  },
+  {
+    path: "/comment",
+    route: commentRoute,
+  },
+  {
+    path: "/follower",
+    route: followerRoute,
+  },
+  {
+    path: "/statistics",
+    route: statisticsRoute,
   },
   
 
