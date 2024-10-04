@@ -2,7 +2,9 @@ import { Router } from "express";
 import { multerUpload } from "../../config/cloudinaryMulter.config";
 import { authorizeRoles, isAuthenticatedUser } from "../../middlewares/auth";
 import {
+  generateVerifyAccountPaymentUrl,
   getAllUser,
+  isCapableForPremium,
   updateUserInfo,
   updateUserProfileImage,
 } from "./user.controller";
@@ -10,9 +12,11 @@ import {
 const router = Router();
 router.get("/all", isAuthenticatedUser, authorizeRoles("admin"), getAllUser);
 router.put("/update", isAuthenticatedUser, updateUserInfo);
+router.get("/can-have-premium", isAuthenticatedUser, isCapableForPremium);
 router.post(
   "/get-verify-url",
   isAuthenticatedUser,
+  generateVerifyAccountPaymentUrl
 );
 router.put(
   "/update-profile-image",
