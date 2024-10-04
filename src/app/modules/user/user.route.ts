@@ -1,18 +1,23 @@
 import { Router } from "express";
-import { upload } from "../../../utils/uploadFile";
+import { multerUpload } from "../../config/cloudinaryMulter.config";
 import { authorizeRoles, isAuthenticatedUser } from "../../middlewares/auth";
 import {
   getAllUser,
   updateUserInfo,
   updateUserProfileImage,
 } from "./user.controller";
+
 const router = Router();
 router.get("/all", isAuthenticatedUser, authorizeRoles("admin"), getAllUser);
 router.put("/update", isAuthenticatedUser, updateUserInfo);
+router.post(
+  "/get-verify-url",
+  isAuthenticatedUser,
+);
 router.put(
   "/update-profile-image",
   isAuthenticatedUser,
-  upload.single("file"),
+  multerUpload.single("file"),
   updateUserProfileImage
 );
 const userRoute = router;
