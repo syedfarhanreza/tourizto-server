@@ -2,7 +2,6 @@ import { catchAsyncError } from "../../../utils/catchAsyncError";
 import sendResponse from "../../../utils/sendResponse";
 import statisticsService from "./statistics.service";
 
-
 export const paymentStatisticsController = catchAsyncError(async (req, res) => {
   const { from, to } = req.query;
   const fromDate = new Date(from as string);

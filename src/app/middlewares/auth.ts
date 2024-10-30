@@ -25,6 +25,7 @@ export const isAuthenticatedUser = async (
       token,
       process.env.JWT_ACCESS_SECRET as string
     );
+    // console.log("desss", decoded);
 
     if (!decoded)
       return res.status(401).json({ message: "Invalid Authentication." });
@@ -60,7 +61,7 @@ export const isAuthenticatedUserOptional = async (
 
     const token = getToken.split(" ")[1];
 
-    if (!token || token === "undefined") {
+    if (!token || token === "undifined") {
       return next();
     }
 
@@ -98,7 +99,7 @@ export const authorizeRoles = (...roles: any) => {
       return next(
         new AppError(
           403,
-          `User type: ${req.user?.role} is not allowed to access this resource `
+          `User type: ${req.user?.role} is not allowed to access this resouce `
         )
       );
     }

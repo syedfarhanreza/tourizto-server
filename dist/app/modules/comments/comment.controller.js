@@ -35,12 +35,13 @@ const createComment = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awa
 }));
 const getCommentsByPostId = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.params.id;
-    const result = yield comment_service_1.commentService.getCommentsByPostId(postId);
+    const { result, totalDoc } = yield comment_service_1.commentService.getCommentsByPostId(postId, req.query);
     (0, sendResponse_1.default)(res, {
         message: "comments retrieved successfully",
         success: true,
         data: result,
         statusCode: 200,
+        totalDoc,
     });
 }));
 const updateComment = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

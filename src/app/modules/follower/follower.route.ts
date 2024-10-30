@@ -1,14 +1,21 @@
 import { Router } from "express";
 import { isAuthenticatedUser } from "../../middlewares/auth";
 import { followerController } from "./follower.controller";
+
 const router = Router();
-router.get("/get", isAuthenticatedUser, followerController.getFollowers);
+
+router.get("/get", isAuthenticatedUser, followerController.getFollwers);
+router.get(
+  "/get/following",
+  isAuthenticatedUser,
+  followerController.getFollwing
+);
 router.post(
   "/create",
   isAuthenticatedUser,
-  followerController.createFollowerController
+  followerController.createFollowerConstroller
 );
-router.delete(
+router.put(
   "/delete",
   isAuthenticatedUser,
   followerController.deleteFollowerController

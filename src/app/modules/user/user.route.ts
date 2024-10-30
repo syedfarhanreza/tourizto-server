@@ -14,7 +14,7 @@ router.get("/all", isAuthenticatedUser, authorizeRoles("admin"), getAllUser);
 router.put("/update", isAuthenticatedUser, updateUserInfo);
 router.get("/can-have-premium", isAuthenticatedUser, isCapableForPremium);
 router.post(
-  "/get-verify-url",
+  "/get-varify-url",
   isAuthenticatedUser,
   generateVerifyAccountPaymentUrl
 );

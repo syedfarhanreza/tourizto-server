@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IErrorSources, IGenericErrorRes } from "../interface/error";
-
-
-
 
 const handleDuplicateError = (err: any): IGenericErrorRes => {
   const errorSources: IErrorSources = [

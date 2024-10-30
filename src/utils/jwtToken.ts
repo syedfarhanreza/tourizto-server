@@ -5,7 +5,7 @@ export interface ITokenPayload {
   role: string;
   id: string;
 }
-export const createAccessToken = (user: ITokenPayload, expires: string) => {
+export const createAcessToken = (user: ITokenPayload, expires: string) => {
   console.log(process.env.JWT_REFRESH_SECRET);
 
   return jwt.sign({ user }, process.env.JWT_ACCESS_SECRET as string, {

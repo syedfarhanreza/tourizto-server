@@ -117,7 +117,7 @@ export const generateVerifyAccountPaymentUrl = catchAsyncError(
     const post = await Post.findOne({ user: user, upvoteCount: { $gt: 0 } });
     if (!post) {
       return sendResponse(res, {
-        message: "Not capable for premium",
+        message: "Not capled for premium",
         success: false,
         data: null,
         statusCode: 404,

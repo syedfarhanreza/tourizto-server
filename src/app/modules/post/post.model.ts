@@ -14,11 +14,11 @@ const PostSchema = new mongoose.Schema(
       required: true,
       ref: "Category",
     },
-    upVotes: {
+    upvotes: {
       type: [Types.ObjectId],
       ref: "User",
     },
-    downVotes: {
+    downvotes: {
       type: [Types.ObjectId],
       ref: "User",
     },
@@ -27,11 +27,11 @@ const PostSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    upVoteCount: {
+    upvoteCount: {
       type: Number,
       default: 0,
     },
-    downVoteCount: {
+    downvoteCount: {
       type: Number,
       default: 0,
     },

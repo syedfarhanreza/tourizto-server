@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recoverPassword = exports.forgotPassword = exports.resetPassword = exports.changeRole = exports.loginController = exports.generateAccessToken = exports.createUserController = exports.authSateController = void 0;
+exports.recoverPassword = exports.forgotPassword = exports.resetPassword = exports.changeRole = exports.loginController = exports.genereteAccessToken = exports.createUserController = exports.authSateController = void 0;
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -72,7 +72,7 @@ exports.createUserController = (0, catchAsyncError_1.catchAsyncError)((req, res)
             session,
         });
         // Generate tokens
-        const token = (0, jwtToken_1.createAccessToken)({
+        const token = (0, jwtToken_1.createAcessToken)({
             email: auth[0].email,
             id: auth[0]._id.toString(),
             role: auth[0].role,
@@ -101,7 +101,7 @@ exports.createUserController = (0, catchAsyncError_1.catchAsyncError)((req, res)
         throw error;
     }
 }));
-exports.generateAccessToken = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.genereteAccessToken = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const getToken = req.header("Authorization");
     if (!getToken)
         return res.status(400).json({ msg: "Invalid Authentication." });
@@ -132,10 +132,10 @@ exports.generateAccessToken = (0, catchAsyncError_1.catchAsyncError)((req, res) 
                 statusCode: 404,
             });
         }
-        const newAccessToken = (0, jwtToken_1.createAccessToken)(accessTOkenPayload, "1h");
+        const newAccessToken = (0, jwtToken_1.createAcessToken)(accessTOkenPayload, "1h");
         (0, sendResponse_1.default)(res, {
             success: true,
-            message: "Successfully retrieve access token",
+            message: "Successfully retrive access token",
             data: { accessToken: newAccessToken, user: isExistUser },
         });
     }
@@ -164,7 +164,7 @@ exports.loginController = (0, catchAsyncError_1.catchAsyncError)((req, res) => _
             statusCode: 403,
         });
     }
-    const token = (0, jwtToken_1.createAccessToken)({
+    const token = (0, jwtToken_1.createAcessToken)({
         email: isExistUser.email,
         id: isExistUser._id.toString(),
         role: isExistUser.role,
@@ -177,7 +177,7 @@ exports.loginController = (0, catchAsyncError_1.catchAsyncError)((req, res) => _
     const _a = (isExistUser === null || isExistUser === void 0 ? void 0 : isExistUser.toObject()) || {}, { password: pass } = _a, rest = __rest(_a, ["password"]);
     res.json({
         data: rest,
-        message: "Login successful",
+        message: "Login successfull",
         success: true,
         accessToken: token,
         refreshToken,
@@ -222,7 +222,7 @@ exports.resetPassword = (0, catchAsyncError_1.catchAsyncError)((req, res) => __a
             statusCode: 404,
         });
     }
-    // verify old password
+    // varify old password
     const isOk = yield bcrypt_1.default.compare(oldPassword, theUser.password);
     if (!isOk) {
         return (0, sendResponse_1.default)(res, {
@@ -341,7 +341,7 @@ exports.recoverPassword = (0, catchAsyncError_1.catchAsyncError)((req, res) => _
         id: user._id.toString(),
         role: user.role,
     };
-    const accessToken = (0, jwtToken_1.createAccessToken)(tokenPayload, "1h");
+    const accessToken = (0, jwtToken_1.createAcessToken)(tokenPayload, "1h");
     res.status(200).json({
         success: true,
         message: "Password has been successfully reset",

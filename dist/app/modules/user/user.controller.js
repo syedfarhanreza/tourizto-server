@@ -86,9 +86,11 @@ exports.getAllUser = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awai
         path: "auth",
         select: "role",
     });
-    const build = new QueryBuilder_1.default(query, req.query)
-        .search(["firstName", "lastName", "email"])
-        .paginate();
+    const build = new QueryBuilder_1.default(query, req.query).search([
+        "firstName",
+        "lastName",
+        "email",
+    ]);
     const totalDoc = yield build.count();
     const result = yield build.modelQuery;
     res.json({
@@ -112,7 +114,7 @@ exports.generateVerifyAccountPaymentUrl = (0, catchAsyncError_1.catchAsyncError)
     const post = yield post_model_1.default.findOne({ user: user, upvoteCount: { $gt: 0 } });
     if (!post) {
         return (0, sendResponse_1.default)(res, {
-            message: "Not capable for premium",
+            message: "Not capled for premium",
             success: false,
             data: null,
             statusCode: 404,

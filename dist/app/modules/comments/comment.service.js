@@ -13,33 +13,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentService = void 0;
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const post_model_1 = __importDefault(require("../post/post.model"));
-const comment_model_1 = __importDefault(require("./comment.model"));
+const comments_model_1 = __importDefault(require("./comments.model"));
 const createComment = (comment) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield comment_model_1.default.create(comment);
+    const isPostExists = yield post_model_1.default.findById(comment.post);
+    if (!isPostExists) {
+        throw new AppError_1.default(404, "Post not found");
+    }
+    const result = yield comments_model_1.default.create(comment);
+    isPostExists.commentCount = isPostExists.commentCount + 1;
+    yield isPostExists.save();
     return result;
 });
-const getCommentsByPostId = (postId) => __awaiter(void 0, void 0, void 0, function* () {
+const getCommentsByPostId = (postId, query) => __awaiter(void 0, void 0, void 0, function* () {
     const isPostExists = yield post_model_1.default.findById(postId);
     if (!isPostExists) {
-        throw new Error("Post not found");
+        throw new AppError_1.default(404, "Post not found");
     }
-    const result = yield comment_model_1.default.find({ post: isPostExists._id });
-    return result;
+    const model = comments_model_1.default.find({ post: isPostExists._id })
+        .populate("user")
+        .sort("-createdAt");
+    const queryBuilder = new QueryBuilder_1.default(model, query).paginate();
+    const totalDoc = yield queryBuilder.count();
+    const result = yield queryBuilder.modelQuery;
+    return { result, totalDoc: totalDoc.totalCount };
 });
 const updateComment = (id, userId, newComment) => __awaiter(void 0, void 0, void 0, function* () {
-    const comment = yield comment_model_1.default.findById(id);
+    const comment = yield comments_model_1.default.findById(id);
     if (!comment) {
         throw new Error("Comment not found");
     }
-    if (comment.user.toString() !== userId) {
+    if (comment.user.toString() !== userId.toString()) {
         throw new Error("Unauthorized access");
     }
     const isPostExists = yield post_model_1.default.findById(comment.post);
     if (!isPostExists) {
         throw new Error("Post not found");
     }
-    const result = yield comment_model_1.default.findByIdAndUpdate(id, {
+    const result = yield comments_model_1.default.findByIdAndUpdate(id, {
         comment: newComment,
     }, {
         new: true,
@@ -47,18 +60,20 @@ const updateComment = (id, userId, newComment) => __awaiter(void 0, void 0, void
     return result;
 });
 const deleteComment = (id, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const comment = yield comment_model_1.default.findById(id);
+    const comment = yield comments_model_1.default.findById(id);
     if (!comment) {
-        throw new Error("Comment not found");
+        throw new AppError_1.default(404, "Comment not found");
     }
-    if (comment.user.toString() !== userId) {
-        throw new Error("Unauthorized access");
+    if (comment.user.toString() !== userId.toString()) {
+        throw new AppError_1.default(403, "Unauthorized access");
     }
     const isPostExists = yield post_model_1.default.findById(comment.post);
     if (!isPostExists) {
-        throw new Error("Post not found");
+        throw new AppError_1.default(404, "Post not found");
     }
-    const result = yield comment_model_1.default.findByIdAndDelete(id);
+    const result = yield comments_model_1.default.findByIdAndDelete(id);
+    isPostExists.commentCount = isPostExists.commentCount - 1;
+    yield isPostExists.save();
     return result;
 });
 exports.commentService = {

@@ -17,10 +17,12 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const follower_model_1 = __importDefault(require("./follower.model"));
 const createFollower = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    // whom to follow
     const isUserExist = yield user_model_1.default.findOne({ _id: payload.user });
     if (!isUserExist) {
         throw new AppError_1.default(404, "User not found");
     }
+    // who follows
     const isFollowerExist = yield user_model_1.default.findOne({ _id: payload.follower });
     if (!isFollowerExist) {
         throw new AppError_1.default(404, "Follower not found");
@@ -31,8 +33,8 @@ const createFollower = (payload) => __awaiter(void 0, void 0, void 0, function* 
     });
     if (isFollowing) {
         const result = yield follower_model_1.default.deleteOne({
-            user: payload.user,
-            follower: payload.follower,
+            user: isUserExist._id,
+            follower: isFollowerExist._id,
         });
         return result;
     }
@@ -49,20 +51,35 @@ const deleteFollower = (payload) => __awaiter(void 0, void 0, void 0, function* 
         throw new AppError_1.default(404, "Follower not found");
     }
     const isFollowing = yield follower_model_1.default.findOne({
-        user: payload.user,
-        follower: payload.follower,
+        user: isUserExist._id,
+        follower: isFollowerExist._id,
     });
     if (!isFollowing) {
-        throw new AppError_1.default(404, "Follower not found");
+        throw new AppError_1.default(404, "Following not found");
     }
     const result = yield follower_model_1.default.deleteOne({
-        user: payload.user,
-        follower: payload.follower,
+        user: isUserExist._id,
+        follower: isFollowerExist._id,
     });
     return result;
 });
-const getFollowers = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield follower_model_1.default.find({ user: user }).populate("follower");
+const getFollwers = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield follower_model_1.default.find({ user: user })
+        .populate("follower")
+        .populate("user")
+        .sort("-createdAt");
     return result;
 });
-exports.followerService = { createFollower, deleteFollower, getFollowers };
+const getFollowingList = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield follower_model_1.default.find({ follower: user })
+        .populate("user")
+        .populate("follower")
+        .sort("-createdAt");
+    return result;
+});
+exports.followerService = {
+    createFollower,
+    deleteFollower,
+    getFollwers,
+    getFollowingList,
+};

@@ -1,4 +1,5 @@
 import mongoose, { Types } from "mongoose";
+
 const CommentSchema = new mongoose.Schema(
   {
     user: {
@@ -14,5 +15,7 @@ const CommentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 const Follower = mongoose.model("Follower", CommentSchema);
+
 export default Follower;

@@ -17,6 +17,7 @@ export const initiatePayment = async (
   const PT = jwt.sign(paymentTokenObj, process.env.SIGNATURE_KEY as string, {
     expiresIn: "1m",
   });
+
   const url = "http://localhost:5000/api/v1";
 
   const response = await axios.post(`${process.env.PAYMENT_URL}`, {

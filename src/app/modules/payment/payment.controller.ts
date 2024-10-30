@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { catchAsyncError } from "../../../utils/catchAsyncError";
 import sendResponse from "../../../utils/sendResponse";
-import { paymentService } from "./payment.service";
 import { IPaymentTokenInfo } from "./payment.interface";
+import { paymentService } from "./payment.service";
 export const successPaymentController = catchAsyncError(async (req, res) => {
   const paymentInfoToken = req.query.pt as string;
   let decode;
@@ -41,3 +41,5 @@ export const failedPaymentController = catchAsyncError(async (req, res) => {
   const result = await paymentService.failedPayment();
   res.send(result);
 });
+
+

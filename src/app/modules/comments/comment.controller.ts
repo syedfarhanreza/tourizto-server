@@ -20,16 +20,22 @@ const createComment = catchAsyncError(async (req, res) => {
     statusCode: 200,
   });
 });
+
 const getCommentsByPostId = catchAsyncError(async (req, res) => {
   const postId = req.params.id;
-  const result = await commentService.getCommentsByPostId(postId);
+  const { result, totalDoc } = await commentService.getCommentsByPostId(
+    postId,
+    req.query
+  );
   sendResponse(res, {
     message: "comments retrieved successfully",
     success: true,
     data: result,
     statusCode: 200,
+    totalDoc,
   });
 });
+
 const updateComment = catchAsyncError(async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
@@ -42,6 +48,7 @@ const updateComment = catchAsyncError(async (req, res) => {
     statusCode: 200,
   });
 });
+
 const deleteComment = catchAsyncError(async (req, res) => {
   const { id } = req.params;
   const user = req.user as JwtPayload;
@@ -53,6 +60,7 @@ const deleteComment = catchAsyncError(async (req, res) => {
     statusCode: 200,
   });
 });
+
 export const commentController = {
   createComment,
   getCommentsByPostId,

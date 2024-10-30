@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { IErrorSources, IGenericErrorRes } from "../interface/error";
 
-
 const handleCastError = (err: mongoose.Error.CastError): IGenericErrorRes => {
   const errorSources: IErrorSources = [
     {

@@ -4,7 +4,7 @@ export interface IPost {
   categories: string;
   premium: boolean;
   user: string;
-  upVoteCount: number;
-  downVoteCount: number;
+  upvoteCount: number;
+  downvoteCount: number;
   commentCount: number;
 }

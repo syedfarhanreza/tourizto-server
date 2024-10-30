@@ -16,12 +16,12 @@ exports.followerController = void 0;
 const catchAsyncError_1 = require("../../../utils/catchAsyncError");
 const sendResponse_1 = __importDefault(require("../../../utils/sendResponse"));
 const follower_service_1 = require("./follower.service");
-const createFollowerController = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createFollowerConstroller = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user._id;
     const { follower } = req.body;
     const payload = {
-        user,
-        follower,
+        user: follower,
+        follower: user,
     };
     const result = yield follower_service_1.followerService.createFollower(payload);
     (0, sendResponse_1.default)(res, {
@@ -35,8 +35,8 @@ const deleteFollowerController = (0, catchAsyncError_1.catchAsyncError)((req, re
     const user = req.user._id;
     const { follower } = req.body;
     const payload = {
-        user,
-        follower,
+        user: follower,
+        follower: user,
     };
     const result = yield follower_service_1.followerService.deleteFollower(payload);
     (0, sendResponse_1.default)(res, {
@@ -46,18 +46,29 @@ const deleteFollowerController = (0, catchAsyncError_1.catchAsyncError)((req, re
         data: result,
     });
 }));
-const getFollowers = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getFollwers = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user._id;
-    const result = yield follower_service_1.followerService.getFollowers(user);
+    const result = yield follower_service_1.followerService.getFollwers(user);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: 200,
-        message: "No Data Found",
+        message: "Data retrive successfully",
+        data: result,
+    });
+}));
+const getFollwing = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user._id;
+    const result = yield follower_service_1.followerService.getFollowingList(user);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: 200,
+        message: "Data retrive successfully",
         data: result,
     });
 }));
 exports.followerController = {
-    createFollowerController,
+    createFollowerConstroller,
     deleteFollowerController,
-    getFollowers,
+    getFollwers,
+    getFollwing,
 };

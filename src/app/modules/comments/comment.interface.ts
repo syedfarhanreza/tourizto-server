@@ -1,5 +1,5 @@
 export interface IComment {
-    comment: string;
-    post: string;
-    user: string;
-  }
+  comment: string;
+  post: string;
+  user: string;
+}

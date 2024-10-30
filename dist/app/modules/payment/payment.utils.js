@@ -26,6 +26,7 @@ const initiatePayment = (payload, userId) => __awaiter(void 0, void 0, void 0, f
         expiresIn: "1m",
     });
     const url = "https://tourizto-server.vercel.app/api/v1";
+    // const url = "http://localhost:5000/api/v1";
     const response = yield axios_1.default.post(`${process.env.PAYMENT_URL}`, {
         store_id: process.env.STORE_ID,
         signature_key: process.env.SIGNATURE_KEY,

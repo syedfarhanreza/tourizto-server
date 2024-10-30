@@ -1,3 +1,3 @@
 export interface ICategory {
-    label: string;
-  }
+  label: string;
+}

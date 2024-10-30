@@ -28,6 +28,7 @@ const isAuthenticatedUser = (req, res, next) => __awaiter(void 0, void 0, void 0
             return res.status(401).json({ message: "Token not provided" });
         }
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_ACCESS_SECRET);
+        // console.log("desss", decoded);
         if (!decoded)
             return res.status(401).json({ message: "Invalid Authentication." });
         const user = yield user_model_1.default.findOne({
@@ -56,7 +57,7 @@ const isAuthenticatedUserOptional = (req, res, next) => __awaiter(void 0, void 0
             return next();
         }
         const token = getToken.split(" ")[1];
-        if (!token || token === "undefined") {
+        if (!token || token === "undifined") {
             return next();
         }
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_ACCESS_SECRET);
@@ -84,7 +85,7 @@ const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         var _a, _b;
         if (!roles.includes((_a = req.user) === null || _a === void 0 ? void 0 : _a.role)) {
-            return next(new AppError_1.default(403, `User type: ${(_b = req.user) === null || _b === void 0 ? void 0 : _b.role} is not allowed to access this resource `));
+            return next(new AppError_1.default(403, `User type: ${(_b = req.user) === null || _b === void 0 ? void 0 : _b.role} is not allowed to access this resouce `));
         }
         next();
     };

@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import mongoose from "mongoose";
 import { catchAsyncError } from "../../../utils/catchAsyncError";
-import { createAccessToken,  createRefreshToken } from "../../../utils/jwtToken";
+import { createAcessToken, createRefreshToken } from "../../../utils/jwtToken";
 import sendMessage from "../../../utils/sendMessage";
 import sendResponse from "../../../utils/sendResponse";
 import User from "../user/user.model";
@@ -54,7 +54,7 @@ export const createUserController = catchAsyncError(async (req, res) => {
     });
 
     // Generate tokens
-    const token = createAccessToken(
+    const token = createAcessToken(
       {
         email: auth[0].email,
         id: auth[0]._id.toString(),
@@ -89,7 +89,7 @@ export const createUserController = catchAsyncError(async (req, res) => {
   }
 });
 
-export const generateAccessToken = catchAsyncError(async (req, res) => {
+export const genereteAccessToken = catchAsyncError(async (req, res) => {
   const getToken = req.header("Authorization");
 
   if (!getToken)
@@ -126,11 +126,11 @@ export const generateAccessToken = catchAsyncError(async (req, res) => {
       });
     }
 
-    const newAccessToken = createAccessToken(accessTOkenPayload, "1h");
+    const newAccessToken = createAcessToken(accessTOkenPayload, "1h");
 
     sendResponse(res, {
       success: true,
-      message: "Successfully retrieve access token",
+      message: "Successfully retrive access token",
       data: { accessToken: newAccessToken, user: isExistUser },
     });
   } catch (error) {
@@ -163,7 +163,7 @@ export const loginController = catchAsyncError(async (req, res) => {
     });
   }
 
-  const token = createAccessToken(
+  const token = createAcessToken(
     {
       email: isExistUser.email,
       id: isExistUser._id.toString() as string,
@@ -182,7 +182,7 @@ export const loginController = catchAsyncError(async (req, res) => {
 
   res.json({
     data: rest,
-    message: "Login successful",
+    message: "Login successfull",
     success: true,
     accessToken: token,
     refreshToken,
@@ -236,7 +236,7 @@ export const resetPassword = catchAsyncError(async (req, res) => {
     });
   }
 
-  // verify old password
+  // varify old password
   const isOk = await bcrypt.compare(oldPassword, theUser.password as string);
   if (!isOk) {
     return sendResponse(res, {
@@ -394,7 +394,7 @@ export const recoverPassword = catchAsyncError(async (req, res) => {
     role: user.role as string,
   };
 
-  const accessToken = createAccessToken(tokenPayload, "1h");
+  const accessToken = createAcessToken(tokenPayload, "1h");
 
   res.status(200).json({
     success: true,

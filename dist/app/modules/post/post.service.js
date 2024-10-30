@@ -29,29 +29,29 @@ const votePost = (postId, userId, vote) => __awaiter(void 0, void 0, void 0, fun
     const userObjectId = new mongoose_1.default.Types.ObjectId(userId);
     if (vote === "upvote") {
         // @ts-ignore
-        const isAlreadyUpVoted = post.upVotes.includes(userObjectId);
-        if (isAlreadyUpVoted) {
-            post.upVotes.pull(userObjectId);
+        const isAlreadyUpvoted = post.upvotes.includes(userObjectId);
+        if (isAlreadyUpvoted) {
+            post.upvotes.pull(userObjectId);
         }
         else {
-            post.upVotes.addToSet(userObjectId);
-            post.downVotes.pull(userObjectId);
+            post.upvotes.addToSet(userObjectId);
+            post.downvotes.pull(userObjectId);
         }
     }
     else {
         // @ts-ignore
-        const isAlreadyDownVoted = post.downVotes.includes(userObjectId);
-        if (isAlreadyDownVoted) {
-            post.downVotes.pull(userObjectId);
+        const isAlreadyDownvoted = post.downvotes.includes(userObjectId);
+        if (isAlreadyDownvoted) {
+            post.downvotes.pull(userObjectId);
         }
         else {
-            post.downVotes.addToSet(userObjectId);
-            post.upVotes.pull(userObjectId);
+            post.downvotes.addToSet(userObjectId);
+            post.upvotes.pull(userObjectId);
         }
     }
     // Update the upvoteCount and downvoteCount after updating the arrays
-    post.upVoteCount = post.upVotes.length;
-    post.downVoteCount = post.downVotes.length;
+    post.upvoteCount = post.upvotes.length;
+    post.downvoteCount = post.downvotes.length;
     // Save the post after updating counts
     yield post.save();
     const result = yield post.save();
@@ -72,7 +72,6 @@ const getAllPosts = (query, user) => __awaiter(void 0, void 0, void 0, function*
     else {
         model = model.find({ premium: false });
     }
-    delete query.premium;
     const queryModel = new QueryBuilder_1.default(model, query)
         .fields()
         .paginate()
@@ -82,12 +81,6 @@ const getAllPosts = (query, user) => __awaiter(void 0, void 0, void 0, function*
     const totalDoc = yield queryModel.count();
     const result = yield queryModel.modelQuery;
     return { result, totalDoc: totalDoc.totalCount };
-});
-const getPostById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield post_model_1.default.findById(id)
-        .populate("user")
-        .populate("categories");
-    return result;
 });
 const updatePost = (id, payload, user) => __awaiter(void 0, void 0, void 0, function* () {
     const isExists = yield post_model_1.default.findById(id);
@@ -113,9 +106,7 @@ const deletePost = (id, user) => __awaiter(void 0, void 0, void 0, function* () 
     if (!isExists) {
         throw new AppError_1.default(404, "Post not found");
     }
-    if (isExists.user.toString() !== user._id.toString() &&
-        user.role !== "admin") {
-        ``;
+    if (isExists.user.toString() !== user.toString()) {
         throw new AppError_1.default(403, "Unauthorized access");
     }
     const result = yield post_model_1.default.findByIdAndDelete(isExists._id);
@@ -126,7 +117,6 @@ const postService = {
     deletePost,
     getAllPosts,
     votePost,
-    getPostById,
     updatePost,
 };
 exports.default = postService;

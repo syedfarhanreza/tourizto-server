@@ -28,27 +28,27 @@ const votePost = async (
 
   if (vote === "upvote") {
     // @ts-ignore
-    const isAlreadyUpVoted = post.upVotes.includes(userObjectId);
-    if (isAlreadyUpVoted) {
-      post.upVotes.pull(userObjectId);
+    const isAlreadyUpvoted = post.upvotes.includes(userObjectId);
+    if (isAlreadyUpvoted) {
+      post.upvotes.pull(userObjectId);
     } else {
-      post.upVotes.addToSet(userObjectId);
-      post.downVotes.pull(userObjectId);
+      post.upvotes.addToSet(userObjectId);
+      post.downvotes.pull(userObjectId);
     }
   } else {
     // @ts-ignore
-    const isAlreadyDownVoted = post.downVotes.includes(userObjectId);
-    if (isAlreadyDownVoted) {
-      post.downVotes.pull(userObjectId);
+    const isAlreadyDownvoted = post.downvotes.includes(userObjectId);
+    if (isAlreadyDownvoted) {
+      post.downvotes.pull(userObjectId);
     } else {
-      post.downVotes.addToSet(userObjectId);
-      post.upVotes.pull(userObjectId);
+      post.downvotes.addToSet(userObjectId);
+      post.upvotes.pull(userObjectId);
     }
   }
 
   // Update the upvoteCount and downvoteCount after updating the arrays
-  post.upVoteCount = post.upVotes.length;
-  post.downVoteCount = post.downVotes.length;
+  post.upvoteCount = post.upvotes.length;
+  post.downvoteCount = post.downvotes.length;
 
   // Save the post after updating counts
   await post.save();
