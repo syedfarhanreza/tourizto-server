@@ -18,7 +18,7 @@ export const initiatePayment = async (
     expiresIn: "1m",
   });
 
-  const url = "http://localhost:5000/api/v1";
+  const url = "https://tourizto-server.vercel.app/api/v1";
 
   const response = await axios.post(`${process.env.PAYMENT_URL}`, {
     store_id: process.env.STORE_ID,

@@ -72,7 +72,7 @@ const createPost = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaite
 const deletePost = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.params;
     const user = req.user;
-    const result = yield post_service_1.default.deletePost(postId, user._id);
+    const result = yield post_service_1.default.deletePost(postId, user);
     (0, sendResponse_1.default)(res, {
         message: "post deleted successfully",
         success: true,
@@ -90,6 +90,16 @@ const getAllPosts = (0, catchAsyncError_1.catchAsyncError)((req, res) => __await
         message: "No Data Found",
         data: result,
         totalDoc,
+    });
+}));
+const getPostById = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield post_service_1.default.getPostById(id);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: 200,
+        message: "Data retrieved successfully",
+        data: result,
     });
 }));
 const votePost = (0, catchAsyncError_1.catchAsyncError)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -119,4 +129,5 @@ exports.postController = {
     deletePost,
     getAllPosts,
     votePost,
+    getPostById,
 };

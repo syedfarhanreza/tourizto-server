@@ -11,6 +11,7 @@ router.post("/create", auth_1.isAuthenticatedUser, (0, validator_1.validSchema)(
 router.delete("/delete/:postId", auth_1.isAuthenticatedUser, post_controller_1.postController.deletePost);
 router.post("/upload-image", auth_1.isAuthenticatedUser, cloudinaryMulter_config_1.multerUpload.single("file"), post_controller_1.postController.uploadPostImage);
 router.get("/get", auth_1.isAuthenticatedUserOptional, post_controller_1.postController.getAllPosts);
+router.get("/get/:id", post_controller_1.postController.getPostById);
 router.patch("/vote/:postId", auth_1.isAuthenticatedUser, post_controller_1.postController.votePost);
 const postRoute = router;
 exports.default = postRoute;

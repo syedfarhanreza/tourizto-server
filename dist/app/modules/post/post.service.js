@@ -72,6 +72,7 @@ const getAllPosts = (query, user) => __awaiter(void 0, void 0, void 0, function*
     else {
         model = model.find({ premium: false });
     }
+    delete query.premium;
     const queryModel = new QueryBuilder_1.default(model, query)
         .fields()
         .paginate()
@@ -81,6 +82,12 @@ const getAllPosts = (query, user) => __awaiter(void 0, void 0, void 0, function*
     const totalDoc = yield queryModel.count();
     const result = yield queryModel.modelQuery;
     return { result, totalDoc: totalDoc.totalCount };
+});
+const getPostById = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield post_model_1.default.findById(id)
+        .populate("user")
+        .populate("categories");
+    return result;
 });
 const updatePost = (id, payload, user) => __awaiter(void 0, void 0, void 0, function* () {
     const isExists = yield post_model_1.default.findById(id);
@@ -106,7 +113,9 @@ const deletePost = (id, user) => __awaiter(void 0, void 0, void 0, function* () 
     if (!isExists) {
         throw new AppError_1.default(404, "Post not found");
     }
-    if (isExists.user.toString() !== user.toString()) {
+    if (isExists.user.toString() !== user._id.toString() &&
+        user.role !== "admin") {
+        ``;
         throw new AppError_1.default(403, "Unauthorized access");
     }
     const result = yield post_model_1.default.findByIdAndDelete(isExists._id);
@@ -117,6 +126,7 @@ const postService = {
     deletePost,
     getAllPosts,
     votePost,
+    getPostById,
     updatePost,
 };
 exports.default = postService;
